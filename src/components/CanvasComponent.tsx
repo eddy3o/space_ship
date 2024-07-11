@@ -18,9 +18,30 @@ const ShipMethods = ({position} : ShipMethodsProps) => {
     }
   })
   return (
-    <group position={vector3Position} scale={[0.6,0.6,0.6]} ref={shipRef}>
+    <group position={vector3Position} scale={[0.3,0.3,0.3]} ref={shipRef}>
       <SpaceShip />
     </group>
+  )
+}
+
+type BallsProps = {
+  spheres: number[][];
+  setSpheres: React.Dispatch<React.SetStateAction<number[][]>>;
+}
+
+const Balls = ({ spheres, setSpheres }: BallsProps) => {
+  useFrame(() => {
+    setSpheres(s => s.map((position)=> {
+      return [position[0], position[1], position[2] - 0.04]
+    }))
+  })
+  return (
+    spheres.map((position: number[], index: number) => (
+      <mesh key={index} position={new Vector3(position[0], position[1], position[2])} >
+        <sphereGeometry args={[0.1, 0.1, 0.1]}/> 
+        <meshStandardMaterial />
+      </mesh>
+    ))
   )
 }
 
@@ -48,14 +69,7 @@ const CanvasComponent = () => {
           rotation={[-0.7, 0, 0]}
         />
         <ShipMethods position={[0, 0, 4]}/>
-        { 
-          sphere.map((position: number[], index: number) => (
-            <mesh key={index} position={new Vector3(position[0], position[1], position[2])} >
-              <sphereGeometry args={[0.1, 0.1, 0.1]}/> 
-              <meshStandardMaterial />
-            </mesh>
-          ))
-        }
+        <Balls spheres={sphere} setSpheres={setSphere}/>
       </Canvas> 
     </>
   )
