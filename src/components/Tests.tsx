@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Vector3 } from 'three';
 import { useRef } from 'react';
@@ -43,6 +45,7 @@ const Sphere = ({position, color} : SphereProps) => {
   )
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 const Things = () => {
   return (
     <Canvas>
@@ -56,7 +59,7 @@ const Things = () => {
         
         {/* <Sphere position={[0, 0, 0]} color='red' /> */}
         <Boxes position = {[1, -1, 0]} color = {'hotpink'} /> 
-
+        <Sphere position={[0, 0, 0]} color='red' />
         <mesh>
           <boxGeometry />
           {/* <meshStandardMaterial /> */}
@@ -73,3 +76,5 @@ const Things = () => {
       </Canvas>
   )
 }
+
+export default Things;
