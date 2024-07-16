@@ -1,75 +1,53 @@
 import { PerspectiveCamera } from "@react-three/drei"
-import { Canvas, useFrame } from "@react-three/fiber"
-import SpaceShip from "./SpaceShip"
-import { Vector3 } from 'three';
-import { useRef, useState } from "react";
-import * as THREE from 'three' 
+import { Canvas } from "@react-three/fiber"
+import { useEffect, useRef, useState } from "react";
 
-type ShipMethodsProps = {
-  position: number[];
-}
 
-const ShipMethods = ({position} : ShipMethodsProps) => {
-  const shipRef = useRef<THREE.Group>(null);
-  const vector3Position = new Vector3(position[0], position[1], position[2]);
-  useFrame((state) => {
-    if (shipRef.current) {
-      shipRef.current.position.x = state.mouse.x * 5
-    }
-  })
-  return (
-    <group position={vector3Position} scale={[0.3,0.3,0.3]} ref={shipRef}>
-      <SpaceShip />
-    </group>
-  )
-}
+import Balls from "./Balls";
+import Enemies from "./Enemies";
+import Ship from "./Ship";
 
-type BallsProps = {
-  spheres: number[][];
-  setSpheres: React.Dispatch<React.SetStateAction<number[][]>>;
-}
-
-const Balls = ({ spheres, setSpheres }: BallsProps) => {
-  useFrame(() => {
-    setSpheres(s => s.map((position)=> {
-      return [position[0], position[1], position[2] - 0.04]
-    }))
-  })
-  return (
-    spheres.map((position: number[], index: number) => (
-      <mesh key={index} position={new Vector3(position[0], position[1], position[2])} >
-        <sphereGeometry args={[0.1, 0.1, 0.1]}/> 
-        <meshStandardMaterial />
-      </mesh>
-    ))
-  )
-}
 
 const CanvasComponent = () => {
   const [sphere, setSphere] = useState<number[][]>([])
+  const [enemies, setEnemies] = useState<number[][]>([])
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  
+  useEffect(() => {
+    // Implementing the setInterval method
+    const interval = setInterval(() => {
+      setEnemies((prevEnemies) => [...prevEnemies, [Math.random() * (5 + 5) - 5, 0, -13]]);
+      console.log('vuelta');
+    }, 1000);
+
+    // Clearing the interval
+    return () => clearInterval(interval);
+  }, []);
 
   const shotBall = (event: React.MouseEvent) => {
     if (!canvasRef.current) return;
 
     const rect = canvasRef.current.getBoundingClientRect();
     const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-
     setSphere([...sphere, [x * 5, 0, 4]]); 
   };
+ 
+  
+
 
   return (
     <>
       <Canvas ref={canvasRef} onClick={shotBall}>
-        <directionalLight color={'pink'} position={[0, 5, 3]} intensity={10} />
+        <directionalLight color={'white'} position={[0, 5, 3]} intensity={10} />
         <gridHelper />
         <PerspectiveCamera 
           makeDefault 
           position={[0, 6, 9]} 
           rotation={[-0.7, 0, 0]}
         />
-        <ShipMethods position={[0, 0, 4]}/>
+        <Ship position={[0, 0, 4]}/>
         <Balls spheres={sphere} setSpheres={setSphere}/>
+        <Enemies spheres={enemies} setSpheres={setEnemies}/>
       </Canvas> 
     </>
   )
