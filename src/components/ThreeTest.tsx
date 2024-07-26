@@ -1,7 +1,7 @@
-import { useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import * as THREE from 'three' 
-import { OrbitControls } from '@react-three/drei';
+import { useRef, useState } from "react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import { OrbitControls } from "@react-three/drei";
 
 const Cube = () => {
   const cubeMaterialRef = useRef<THREE.MeshToonMaterial>(null);
@@ -14,8 +14,8 @@ const Cube = () => {
 
   useFrame(({ clock }) => {
     const elapsedTime = clock.getElapsedTime();
-    const baseValue = 128;  // Ajusta este valor para cambiar el nivel mínimo de brillo
-    const amplitude = 127;  // Ajusta este valor para cambiar la amplitud del cambio de color
+    const baseValue = 128; // Ajusta este valor para cambiar el nivel mínimo de brillo
+    const amplitude = 127; // Ajusta este valor para cambiar la amplitud del cambio de color
 
     const r = Math.sin(elapsedTime * 0.5) * amplitude + baseValue;
     const g = Math.sin(elapsedTime * 0.7 + 2) * amplitude + baseValue;
@@ -40,23 +40,23 @@ const Cube = () => {
       <meshToonMaterial ref={cubeMaterialRef} />
     </mesh>
   );
-}
+};
 
 const LightHandler = () => {
-  const light = useRef<THREE.DirectionalLight>(null)
+  const light = useRef<THREE.DirectionalLight>(null);
   useFrame((state) => {
     if (light.current) {
       light.current.position.x = state.mouse.x;
       light.current.position.y = state.mouse.y;
     }
-  })
+  });
 
   return (
     <>
-      <directionalLight position={[0, 0, 3]} intensity={1} ref={light}/>
+      <directionalLight position={[0, 0, 3]} intensity={1} ref={light} />
     </>
-  ) 
-}
+  );
+};
 
 const ThreeTest = () => {
   return (
@@ -65,11 +65,11 @@ const ThreeTest = () => {
         <ambientLight intensity={0.1} />
         <LightHandler />
         <Cube />
-        <OrbitControls/>
+        <OrbitControls />
         <gridHelper />
-      </Canvas> 
+      </Canvas>
     </>
-  )
-}
+  );
+};
 
-export default ThreeTest
+export default ThreeTest;
