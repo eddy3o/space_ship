@@ -20,7 +20,7 @@ const Balls = ({ spheres, setSpheres }: BallsProps) => {
       key={index}
       position={new THREE.Vector3(position[0], position[1], position[2])}
     >
-      <sphereGeometry args={[0.1, 0.1, 0.1]} />
+      <sphereGeometry args={[0.1, 32, 16]} />
       <meshStandardMaterial />
     </mesh>
   ));
